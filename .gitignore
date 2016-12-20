@@ -1,0 +1,7 @@
+node_modules
+.idea
+config.js
+client/.gitignore
+client/.idea
+server/.gitignore
+server/.idea
