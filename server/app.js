@@ -14,7 +14,12 @@ app.use(views('views', {
   root: __dirname + '/views',
   default: 'jade'
 }));
-app.use(require('koa-bodyparser')());
+//设置请求体长度
+app.use(require('koa-bodyparser')({
+  "formLimit":"5mb",
+  "jsonLimit":"5mb",
+  "textLimit":"5mb"
+}));
 app.use(json());
 app.use(logger());
 app.use(cors());//设置跨域

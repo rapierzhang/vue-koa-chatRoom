@@ -5,3 +5,4 @@ client/.gitignore
 client/.idea
 server/.gitignore
 server/.idea
+server/public/images
