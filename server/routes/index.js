@@ -113,7 +113,6 @@ router.get('/', function *(next) {
 });
 
 router.post('/image', function *(next) {
-  var ctx = this;
   var imgData= this.request.body.imageData;
 
   var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
@@ -135,7 +134,7 @@ router.post('/image', function *(next) {
 
     } else {
       console.log('不存在');
-      yield fs.mkdir(publicFile, function (err) {
+      fs.mkdir(publicFile, function (err) {
         if (err) {
           console.log('创建目录失败');
         } else {
