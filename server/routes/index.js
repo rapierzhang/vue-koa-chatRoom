@@ -134,15 +134,16 @@ router.post('/image', function *(next) {
 
     } else {
       console.log('不存在');
-      fs.mkdir(publicFile, function (err) {
-        if (err) {
-          console.log('创建目录失败');
-        } else {
-          console.log('创建目录成功');
-        }
-      })
     }
   });
+
+  yield fs.mkdir(publicFile, function (err) {
+    if (err) {
+      console.log('创建目录失败');
+    } else {
+      console.log('创建目录成功');
+    }
+  })
 
   yield fs.writeFile(publicFile + '/' + imgName, dataBuffer, function(err) {
       if(err){
