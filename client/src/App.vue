@@ -4,7 +4,7 @@
 
     <div class="message">
       <div class="content">
-        <div class="content-inner">
+        <div class="content-inner" id="content-inner">
 
           <div class="message-outer" v-for="message in messageList">
             <div class="other-message" v-if="message.user != username">
@@ -194,7 +194,7 @@
   methods: {
     initWebSocket: function () {
       var vm = this;
-      vm.ws = new WebSocket("ws://10.10.33.19:8081");
+      vm.ws = new WebSocket("ws://10.10.33.203:8081");
       vm.ws.onopen = function (e) {
         console.log('websocket 链接服务端成功');
       };
@@ -354,8 +354,19 @@
               }
           );
 
-    },
-  }
+    }
+  },
+    watch: {
+      //监听数据改变
+      messageList: function () {
+      //监听dom改变
+        this.$nextTick(function () {
+          var innerHerght = document.getElementById('content-inner').offsetHeight;
+          var content = document.getElementsByClassName('content')[0];
+          content.scrollTop = innerHerght;
+        })
+      }
+    }
 }
 </script>
 
@@ -596,7 +607,6 @@
     margin: 5px 0;
     line-height: 20px;
     text-align: center;
-    border-left: 1px solid #ddd;
     border-right: 1px solid #ddd;
     float: left;
     font-weight: 700;
