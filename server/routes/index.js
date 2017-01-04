@@ -113,7 +113,9 @@ router.get('/', function *(next) {
 });
 
 router.post('/image', function *(next) {
-  var imgData= this.request.body.imageData;
+  var ctx = this;
+  var user = this.request.body.user;
+  var imgData = this.request.body.imageData;
 
   var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
   var dataBuffer = new Buffer(base64Data, 'base64');
@@ -128,37 +130,46 @@ router.post('/image', function *(next) {
   var publicFile = publicRoot + file;
   var imgName = uuid.v1().replace(/\-/g,'') + '.png';
 
-  yield fs.exists(publicFile, function(exists) {
-    if (exists) {
-      console.log('存在');
+  function *operate() {
+    yield fs.exists(publicFile, function(exists) {
+      if (exists) {
+        console.log('存在');
 
-    } else {
-      console.log('不存在');
-    }
-  });
+      } else {
+        console.log('不存在');
+      }
+    });
 
-  yield fs.mkdir(publicFile, function (err) {
-    if (err) {
-      console.log('创建目录失败');
-    } else {
-      console.log('创建目录成功');
-    }
-  })
+    yield fs.mkdir(publicFile, function (err) {
+      if (err) {
+        console.log('创建目录失败');
+      } else {
+        console.log('创建目录成功');
+      }
+    })
 
-  yield fs.writeFile(publicFile + '/' + imgName, dataBuffer, function(err) {
+    yield fs.writeFile(publicFile + '/' + imgName, dataBuffer, function(err) {
       if(err){
         console.log(err);
         console.log("保存失败!");
-        /*ctx.body = {
-          error: err
-        };*/
       }else{
         console.log('保存成功!');
-        /*ctx.body = {
-          imgPath: file + '/' + imgName
-        };*/
       }
     });
+  }
+  var op = operate();
+  op.next();
+  op.next();
+  op.next();
+  var dateTime = Date.parse(new Date());
+  var imgBody = {
+    type: 'image',
+    user: user,
+    dateTime: dateTime,
+    imgPath: 'http://127.0.0.1:3000/'+file + '/' + imgName
+  };
+  ctx.body = imgBody;
+  wss.broadcast(imgBody);
 });
 
 module.exports = router;

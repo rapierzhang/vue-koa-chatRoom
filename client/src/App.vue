@@ -10,6 +10,7 @@
             <div class="other-message" v-if="message.user != username">
               <p class="other-name">{{message.user}} {{message.dateTime | time}}</p>
               <div class="other-content"
+                   v-if="message.ctx"
                    :style="{color:message.color,
                    fontSize:message.fontSize,
                    fontWeight:message.fontWeight,
@@ -17,17 +18,26 @@
                    textDecoration:message.underline}">
                 {{message.ctx}}
               </div>
+              <div class="other-img"
+                   v-if="message.imgPath">
+                <img :src="message.imgPath" alt="">
+              </div>
             </div>
 
             <div class="myself-message" v-else="message.user != username">
               <p class="myself-name">{{message.user}} {{message.dateTime | time}}</p>
               <div class="myself-content"
+                   v-if="message.ctx"
                    :style="{color:message.color,
                    fontSize:message.fontSize,
                    fontWeight:message.fontWeight,
                    fontStyle:message.incline,
                    textDecoration:message.underline}">
                 {{message.ctx}}
+              </div>
+              <div class="self-img"
+                   v-if="message.imgPath">
+                <img :src="message.imgPath" alt="">
               </div>
             </div>
           </div>
@@ -219,6 +229,11 @@
             console.log(message);
             vm.messageList.push(message);
             break;
+          case 'image':
+            var images = msgData;
+              console.log(images);
+            vm.messageList.push(images);
+            break;
           //用户退出
           case 'logout':
             console.log(msgData);
@@ -320,7 +335,7 @@
     },
     // 将图片转为base64
     createImage: function (file) {
-      if(typeof FileReader==='undefined'){
+      if(typeof FileReader === 'undefined'){
         alert('您的浏览器不支持图片上传，请升级您的浏览器');
         return false;
       }
@@ -337,6 +352,7 @@
       var vm = this;
       var imageAddUrl = "http://localhost:3000/socket/image";
       var imageAddData = {
+        user: this.username,
         imageData: this.image
       };
       console.log(imageAddData);
@@ -358,6 +374,7 @@
   },
     watch: {
       //监听数据改变
+
       messageList: function () {
       //监听dom改变
         this.$nextTick(function () {
@@ -571,11 +588,33 @@
     border-radius: 8px;
   }
 
+  .other-img {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 8px;
+  }
+
+  .other-img img {
+    max-width: 100%;
+  }
+
   .myself-message {
     max-width: 45%;
     min-height: 30px;
     margin: 10px 0;
     float: right;
+  }
+
+  .self-img {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 8px;
+  }
+
+  .self-img img {
+    max-width: 100%;
   }
 
   .myself-name {
