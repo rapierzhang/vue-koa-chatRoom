@@ -20,7 +20,7 @@
               </div>
               <div class="other-img"
                    v-if="message.imgPath">
-                <img :src="message.imgPath" alt="">
+                <img class="msg-images" :src="message.imgPath" alt="">
               </div>
             </div>
 
@@ -37,7 +37,7 @@
               </div>
               <div class="self-img"
                    v-if="message.imgPath">
-                <img :src="message.imgPath" alt="">
+                <img class="msg-images" :src="message.imgPath" alt="">
               </div>
             </div>
           </div>
@@ -172,10 +172,11 @@
       incline:'normal',//倾斜italic
       pitchOnUnderline:'',
       underline:'none',//下划线text-decoration:underline
-      color: '#000',
+      color: '#000000',
       ws: '',//websocket
       userList: [],//用户列表
       messageList: [],//消息列表
+      imageList: [],//图片列表
       editingMsg: '',//输入框中的消息
       showColor: false,//颜色选项框
       colorList: [
@@ -233,6 +234,7 @@
             var images = msgData;
               console.log(images);
             vm.messageList.push(images);
+            vm.imageList.push(images);
             break;
           //用户退出
           case 'logout':
@@ -370,20 +372,36 @@
               }
           );
 
+    },
+    // 计算高度
+    countScroll: function () {
+      var innerHerght = document.getElementById('content-inner').offsetHeight;
+      var content = document.getElementsByClassName('content')[0];
+      content.scrollTop = innerHerght;
     }
   },
-    watch: {
-      //监听数据改变
-
-      messageList: function () {
-      //监听dom改变
-        this.$nextTick(function () {
-          var innerHerght = document.getElementById('content-inner').offsetHeight;
-          var content = document.getElementsByClassName('content')[0];
-          content.scrollTop = innerHerght;
+  watch: {
+    //监听数据改变
+    messageList: function () {
+      var vm = this;
+    //监听dom改变
+      vm.$nextTick(function () {
+        vm.countScroll();
+      })
+    },
+    imageList: function () {
+      var vm = this;
+      vm.$nextTick(function () {
+        var images = document.getElementsByClassName('msg-images');
+        var imagesLen = images.length;
+         var image = images[imagesLen - 1];
+        image.addEventListener('load', function () {
+          vm.countScroll();
         })
-      }
+
+      })
     }
+  }
 }
 </script>
 
