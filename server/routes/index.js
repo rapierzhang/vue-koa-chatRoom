@@ -146,7 +146,7 @@ router.post('/image', function *(next) {
       } else {
         console.log('创建目录成功');
       }
-    })
+    });
 
     yield fs.writeFile(publicFile + '/' + imgName, dataBuffer, function(err) {
       if(err){
@@ -162,14 +162,14 @@ router.post('/image', function *(next) {
   op.next();
   op.next();
   var dateTime = Date.parse(new Date());
-  var imgBody = {
+  var imgData = {
     type: 'image',
     user: user,
     dateTime: dateTime,
     imgPath: 'http://127.0.0.1:3000/'+file + '/' + imgName
   };
-  ctx.body = imgBody;
-  wss.broadcast(imgBody);
+  ctx.body = imgData;
+  wss.broadcast(imgData);
 });
 
 module.exports = router;

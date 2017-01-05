@@ -229,6 +229,12 @@
             var message = msgData;
             console.log(message);
             vm.messageList.push(message);
+            // 浏览器通知
+            if(window.Notification && Notification.permission !== "denied" && message.user != vm.username) {
+              Notification.requestPermission(function(status) {
+                var n = new Notification(message.user, { body: message.ctx });
+              });
+            }
             break;
           case 'image':
             var images = msgData;
@@ -323,6 +329,7 @@
     selectColor: function (color) {
       this.color = color;
     },
+    // 单机触发file
     file: function () {
       var file = document.getElementById('file');
       file.click();
