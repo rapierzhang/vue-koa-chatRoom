@@ -169,6 +169,7 @@
   name: 'app',
   data () {
     return {
+      host: document.domain,
       inputName: true,//编辑用户名
       username: '',//用户名
       userNum: '0',//在线用户数量
@@ -213,8 +214,7 @@
     initWebSocket: function () {
       var vm = this;
       console.log('开始链接');
-      var host = document.domain;
-      vm.ws = new WebSocket("ws://" + host + ":5051");
+      vm.ws = new WebSocket("ws://" + this.$data.host + ":5051");
       vm.ws.onopen = function (e) {
         console.log('websocket 链接服务端成功');
       };
@@ -368,7 +368,7 @@
     // 上传图片
     uploadImage: function () {
       var vm = this;
-      var imageAddUrl = "http://vuekoaroom.applinzi.com/socket/image";
+      var imageAddUrl = "http://" + this.$data.host + "/socket/image";
       var imageAddData = {
         user: this.username,
         imageData: this.image
