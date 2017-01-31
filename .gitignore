@@ -1,6 +1,7 @@
 node_modules
 .idea
 config.js
+build/
 client/.gitignore
 client/.idea
 server/.gitignore

@@ -4,7 +4,7 @@ var app = require('koa')()
   ,fs = require('fs')
   ,uuid = require('node-uuid');
 
-var sever = app.listen(8081);
+var sever = app.listen(5051);
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({
   server: sever
@@ -109,7 +109,8 @@ wss.leaveBroadcast = function (data) {
 
 router.get('/', function *(next) {
   var ctx = this;
-
+  this.body = this.ip;
+  console.log(this.ip);
 });
 
 router.post('/image', function *(next) {
@@ -166,7 +167,7 @@ router.post('/image', function *(next) {
     type: 'image',
     user: user,
     dateTime: dateTime,
-    imgPath: 'http://127.0.0.1:3000/'+file + '/' + imgName
+    imgPath: 'http://vuekoaroom.applinzi.com/'+file + '/' + imgName
   };
   ctx.body = imgData;
   wss.broadcast(imgData);

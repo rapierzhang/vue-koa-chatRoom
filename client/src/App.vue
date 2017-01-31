@@ -89,9 +89,9 @@
             <!--字体倾斜-->
 
             <div class="font-outer" @click="selectIncline()">
-              <sapn class="font-incline" :class="pitchOnIncline">
+              <span class="font-incline" :class="pitchOnIncline">
                 I
-              </sapn>
+              </span>
             </div>
 
             <!--字体下划线-->
@@ -152,6 +152,13 @@
       <input class="username-input" type="text" v-model="username" @keydown.enter="saveUsername">
       <button class="username-button" @click="saveUsername()">确认</button>
     </div>
+
+    <!--<div class="pop-mask">-->
+      <!--<div class="dark-mask"></div>-->
+      <!--<div class="mask-image">-->
+        <!--<img id="mask-img" src="http://127.0.0.1:3000/images/201714/0a1094c0d2f811e69966bb7a028a9563.png" alt="">-->
+      <!--</div>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -205,7 +212,9 @@
   methods: {
     initWebSocket: function () {
       var vm = this;
-      vm.ws = new WebSocket("ws://10.10.33.203:8081");
+      console.log('开始链接');
+      var host = document.domain;
+      vm.ws = new WebSocket("ws://" + host + ":5051");
       vm.ws.onopen = function (e) {
         console.log('websocket 链接服务端成功');
       };
@@ -359,7 +368,7 @@
     // 上传图片
     uploadImage: function () {
       var vm = this;
-      var imageAddUrl = "http://localhost:3000/socket/image";
+      var imageAddUrl = "http://vuekoaroom.applinzi.com/socket/image";
       var imageAddData = {
         user: this.username,
         imageData: this.image
@@ -485,6 +494,8 @@
     float: left;
   }
 
+  /*------------------输入框-----------------*/
+
   .edit-area {
     width: 100%;
     height: 120px;
@@ -500,7 +511,7 @@
 
   .textarea {
     width: 100%;
-    height: 87px;
+    height: 88px;
     float: left;
     border: none;
     padding: 10px;
@@ -640,6 +651,10 @@
 
   .self-img img {
     max-width: 100%;
+  }
+
+  .msg-images {
+    cursor: pointer ;
   }
 
   .myself-name {
@@ -822,6 +837,34 @@
     background-repeat: no-repeat;
     background-position: 5px 5px;
     cursor: pointer;
+  }
+
+  /*-------------------浮层------------------------*/
+
+  .pop-mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .dark-mask {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: .5;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .mask-image {
+    width: auto;
+    position: relative;
+    z-index: 900;
   }
 
 </style>
